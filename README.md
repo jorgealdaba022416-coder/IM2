@@ -1,4 +1,10 @@
 # IM2
-Run in mysql:
+Run in mysql: Database Setup
+To import the database:
+
+1. Create the database:
+   ```sql
+   CREATE DATABASE aldaba_fmarketdirect;
+
 
 mysql -u root -p aldaba_fmarketdirect < aldaba_fmarketdirect.sql
