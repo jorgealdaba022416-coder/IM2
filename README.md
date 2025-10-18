@@ -6,5 +6,8 @@ To import the database:
    ```sql
    CREATE DATABASE aldaba_fmarketdirect;
 
+Run this in mysql
 
 mysql -u root -p aldaba_fmarketdirect < aldaba_fmarketdirect.sql
+
+Put all html files in a wwwroot folder
