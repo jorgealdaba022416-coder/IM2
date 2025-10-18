@@ -1,2 +1,2 @@
 # IM2
-Yes
+mysql -u root -p aldaba_fmarketdirect < aldaba_fmarketdirect.sql
