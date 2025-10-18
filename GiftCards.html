@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gift Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #giftcards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 50%; 
+            justify-content: center;
+        }
+
+        .giftcard-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.2s ease-in-out;
+            width: 100%; 
+            max-width: 200px; 
+            margin: 0 auto; 
+        }
+
+            .giftcard-btn:hover {
+                background: #45a049;
+            }
+
+        .back-btn {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+            .back-btn:hover {
+                color: #4CAF50;
+            }
+    </style>
+</head>
+<body>
+    <button onclick="location.href='MainMenu.html'" class="back-btn">←</button>
+    <h1>Available Gifts</h1>
+    <div id="giftcards">Loading gift cards...</div>
+
+    <script>
+        async function loadGiftCards() {
+            try {
+                const response = await fetch('/giftcards');
+                if (!response.ok) throw new Error('Failed to fetch gift cards');
+
+                const giftcards = await response.json();
+                const container = document.getElementById('giftcards');
+                container.innerHTML = '';
+
+                if (giftcards.length === 0) {
+                    container.textContent = 'No gift cards found.';
+                    return;
+                }
+
+                // Create a button for each gift card
+                giftcards.forEach(card => {
+                    const btn = document.createElement('button');
+                    btn.className = 'giftcard-btn';
+                    btn.textContent = `${card.name} - $${card.amount}`;
+                    btn.onclick = () => purchaseItem(card.name, card.amount, "giftcards");
+                    container.appendChild(btn);
+                });
+
+            } catch (error) {
+                document.getElementById('giftcards').textContent =
+                    `Error loading gift cards: ${error.message}`;
+                console.error(error);
+            }
+        }
+        async function purchaseItem(name, amount, table) {
+            try {
+                const response = await fetch('/purchase', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, amount, table })
+                });
+
+                console.log("Response status:", response.status);
+
+                const text = await response.text();
+                console.log("Raw response text:", text);
+
+                const result = JSON.parse(text);
+                console.log("Parsed result:", result);
+
+                if (result.success) {
+                    alert(`✅ Purchased ${name} for $${amount}`);
+                } else {
+                    alert("❌ Purchase failed. Please try again.");
+                }
+            } catch (err) {
+                console.error("Error purchasing:", err);
+                alert("⚠️ Unknown error, check console for details.");
+            }
+        }
+
+
+
+    // Load gift cards on page start
+    window.onload = loadGiftCards;
+
+    </script>
+
+
+
+</body>
+</html>
+

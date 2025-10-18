@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            transition: background 0.3s;
+        }
+
+            button:hover {
+                background: #45a049;
+            }
+
+        .options {
+            margin-top: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .options button {
+                width: 150px;
+                background: #2196F3;
+            }
+
+                .options button:hover {
+                    background: #1e87e5;
+                }
+
+        /* Checkout button styles */
+        .checkout-btn {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #FF9800;
+            color: white;
+            font-size: 20px;
+            padding: 15px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s ease-in-out;
+        }
+
+            .checkout-btn:hover {
+                background: #e68900;
+            }
+    </style>
+</head>
+<body>
+    <h1>Main Menu</h1>
+    <div class="menu">
+        <div>
+            <button onclick="toggleOptions('meat-options')">Meat</button>
+            <div class="options" id="meat-options">
+                <button onclick="location.href='Beef.html'">Beef</button>
+                <button onclick="location.href='Pork.html'">Pork</button>
+                <button onclick="location.href='Chicken.html'">Chicken</button>
+            </div>
+        </div>
+        <div>
+            <button onclick="toggleOptions('drinks-options')">Drinks</button>
+            <div class="options" id="drinks-options">
+                <button onclick="location.href='Beverages.html'">Beverages</button>
+                <button onclick="location.href='Coffee.html'">Coffee</button>
+            </div>
+        </div>
+        <button onclick="location.href='Giftcards.html'">Gift Cards</button>
+    </div>
+
+    <!-- New Checkout Button -->
+    <button class="checkout-btn" onclick="location.href='Checkout.html'">Go to Checkout</button>
+
+    <script>
+        function toggleOptions(id) {
+            const options = document.getElementById(id);
+            options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
+</body>
+</html>
+
+

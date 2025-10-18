@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Summary</title>
+</head>
+<body>
+    <a href="MainMenu.html" class="back-arrow">&#8592;</a>
+    <h2>Checkout Summary</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total Purchases</th>
+                <th>Total Sales</th>
+            </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+    </table>
+
+    <script>
+        async function loadSummary() {
+            const tables = ["coffee", "beverages", "beef", "pork", "chicken", "giftcards"];
+            const body = document.getElementById("summaryBody");
+            body.innerHTML = "";
+
+            for (const table of tables) {
+                const res = await fetch(`/summary/${table}`);
+                const data = await res.json();
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${table}</td>
+                    <td>${data.purchasecount}</td>
+                    <td>$${data.totalsales.toFixed(2)}</td>
+                `;
+                body.appendChild(row);
+            }
+        }
+
+        window.onload = loadSummary;
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pork Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .purchase-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+        }
+
+        .soldout-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            text-decoration: none;
+            margin: 25px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <a href="MainMenu.html" class="back-arrow">&#8592;</a>
+    <h2>Available Pork</h2>
+    <table id="porkTable" border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Cost</th>
+                <th>Currency</th>
+                <th>Weight</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="5">Loading pork products...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        async function loadPork() {
+            try {
+                const response = await fetch('/pork');
+                const data = await response.json();
+
+                const tableBody = document.querySelector("#porkTable tbody");
+                tableBody.innerHTML = "";
+
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td>${item.amount}</td>
+                        <td>${item.currency}</td>
+                        <td>${item.weight}</td>
+                        <td>
+                            ${item.availability
+                                ? `<button class="purchase-btn" onclick="purchaseItem('${item.name}', '${item.amount}', 'pork')">Purchase</button>`
+                                : '<button class="soldout-btn" disabled>Sold Out</button>'}
+                        </td>
+                        `;
+
+                    tableBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error("Error loading pork:", err);
+            }
+        }
+        async function purchaseItem(name, amount, table) {
+            try {
+                const response = await fetch('/purchase', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, amount, table })
+                });
+
+                console.log("Response status:", response.status);
+
+                const text = await response.text();
+                console.log("Raw response text:", text);
+
+                const result = JSON.parse(text);
+                console.log("Parsed result:", result);
+
+                if (result.success) {
+                    alert(`✅ Purchased ${name} for $${amount}`);
+                } else {
+                    alert("❌ Purchase failed. Please try again.");
+                }
+            } catch (err) {
+                console.error("Error purchasing:", err);
+                alert("⚠️ Unknown error, check console for details.");
+            }
+        }
+
+
+
+        window.onload = loadPork;
+    </script>
+</body>
+</html>
